@@ -17,18 +17,18 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4  
+        uses: actions/checkout@v4  # ✅ Latest version
 
       - name: Setup Pages
-        uses: actions/configure-pages@v4  
+        uses: actions/configure-pages@v4  # ✅ Latest version
 
       - name: Create config.js
-        run: echo "const RECAPTCHA_SITE_KEY = '${{ secrets.RECAPTCHA_SITE_KEY }}';" > config.js 
+        run: echo "const RECAPTCHA_SITE_KEY = '${{ secrets.RECAPTCHA_SITE_KEY }}';" > config.js  # ✅ Generate `config.js`
 
       - name: Upload GitHub Pages Artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v2  # ✅ `v2` is the correct latest version
         with:
           path: .
 
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v2  # ✅ `v2` is the correct latest version
