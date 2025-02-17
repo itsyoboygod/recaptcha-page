@@ -48,3 +48,5 @@ Thumbs.db
 # Optional: Ignore any generated files for Docker, Firebase, or other platforms
 docker-compose.override.yml
 firebase-debug.log
+
+config.js
