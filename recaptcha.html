@@ -5,11 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>reCAPTCHA Verification</title>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="config.js"></script> <!-- Load config.js -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("captcha").setAttribute("data-sitekey", RECAPTCHA_SITE_KEY);
+        });
+    </script>
 </head>
 <body>
     <h2>Verify CAPTCHA</h2>
     <form action="?" method="POST">
-        <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>
+        <div class="g-recaptcha" id="captcha"></div>
         <br />
         <button type="submit">Submit</button>
     </form>
