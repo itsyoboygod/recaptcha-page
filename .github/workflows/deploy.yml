@@ -32,23 +32,3 @@ jobs:
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v2  # ✅ `v2` is the correct latest version
-
-      - name: Create a file
-        run: echo "hello world" > my-file.txt
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: my-artifact # NOTE: same artifact name
-          path: my-file.txt
-
-    upload-again:
-    needs: upload
-    runs-on: ubuntu-latest
-    steps:
-      - name: Create a different file
-        run: echo "goodbye world" > my-file.txt
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: my-artifact # NOTE: same artifact name
-          path: my-file.txt
