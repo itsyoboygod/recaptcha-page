@@ -1,1 +1,1 @@
-const RECAPTCHA_SITE_KEY = "YOUR_SITE_KEY";
+const RECAPTCHA_SITE_KEY = "test";
