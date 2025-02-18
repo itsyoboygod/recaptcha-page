@@ -17,8 +17,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Inject reCAPTCHA SITE_KEY
-        run: echo "const RECAPTCHA_SITE_KEY = '${{ secrets.RECAPTCHA_SITE_KEY }}';" > config.js
+      - name: Inject RECAPTCHA_SITE_KEY directly into index.html
+        run: sed -i 's|YOUR_SITE_KEY|${{ secrets.RECAPTCHA_SITE_KEY }}|' index.html
 
       - name: Upload artifact for deployment
         uses: actions/upload-pages-artifact@v3

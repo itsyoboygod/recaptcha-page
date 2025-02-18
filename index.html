@@ -4,29 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>reCAPTCHA Verification</title>
+    
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
-    <!-- ✅ Dynamically load config.js only if it exists -->
+    
+    <!-- ✅ Site key is directly injected here at build time -->
     <script>
-        fetch('config.js')
-            .then(response => response.ok ? response.text() : Promise.reject("Config not found"))
-            .then(script => {
-                const configScript = document.createElement("script");
-                configScript.textContent = script;
-                document.head.appendChild(configScript);
-
-                // Set the reCAPTCHA site key dynamically
-                document.addEventListener("DOMContentLoaded", function () {
-                    document.getElementById("captcha").setAttribute("data-sitekey", RECAPTCHA_SITE_KEY);
-                });
-            })
-            .catch(error => console.warn("⚠️ config.js not found, reCAPTCHA will not load:", error));
+        const RECAPTCHA_SITE_KEY = "YOUR_SITE_KEY"; // This will be replaced by GitHub Actions
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("captcha").setAttribute("data-sitekey", RECAPTCHA_SITE_KEY);
+        });
     </script>
 </head>
 <body>
     <h2>Verify CAPTCHA</h2>
     <form action="?" method="POST">
-        <h1>reCAPTCHA Verification from reCaptcha-page</h1>
+        <h1>reCAPTCHA Verification</h1>
         <div class="g-recaptcha" id="captcha"></div>
         <br />
         <button type="submit">Submit</button>
