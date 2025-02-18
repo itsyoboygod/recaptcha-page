@@ -34,10 +34,10 @@ jobs:
         run: echo "const RECAPTCHA_SITE_KEY = '${{ secrets.RECAPTCHA_SITE_KEY }}';" > dist/config.js
 
       - name: Upload Artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
-          path: dist  # Ensure this matches the output directory of your build
-          name: github-pages  # Name the artifact 'github-pages'
+          name: build-artifact
+          path: ./build
 
   deploy:
     runs-on: ubuntu-latest
