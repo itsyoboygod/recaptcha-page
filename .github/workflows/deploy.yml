@@ -1,48 +1,36 @@
-name: Deploy to GitHub Pages
+name: Deploy reCAPTCHA Page
 
 on:
   push:
     branches:
-      - main  # Runs when you push to main branch
-  workflow_dispatch:  # Allows manual trigger
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+      - main
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '16'  # Specify the Node.js version
+          node-version: '16'
 
-      - name: Install Dependencies
-        run: npm install  # Adjust this if you're using yarn or another package manager
+      - name: Install dependencies
+        run: npm install
 
-      - name: Build Project
-        run: npm run build  # Ensure this script generates your static files into a 'dist' directory
+      - name: Build project
+        run: npm run build
 
-      - name: Create config.js
-        run: echo "const RECAPTCHA_SITE_KEY = '${{ secrets.RECAPTCHA_SITE_KEY }}';" > dist/config.js
+      - name: Inject reCAPTCHA SITE_KEY
+        run: |
+          echo "Injecting reCAPTCHA SITE_KEY into recaptcha.html"
+          sed -i 's/YOUR_SITE_KEY/${{ secrets.RECAPTCHA_SITE_KEY }}/' recaptcha.html
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifact
-          path: ./build
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v2
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
