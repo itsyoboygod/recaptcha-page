@@ -11,18 +11,23 @@ permissions:
   id-token: write
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Inject reCAPTCHA SITE_KEY
-        run: |
-          echo "const RECAPTCHA_SITE_KEY = '${{ secrets.RECAPTCHA_SITE_KEY }}';" > config.js
+        run: echo "const RECAPTCHA_SITE_KEY = '${{ secrets.RECAPTCHA_SITE_KEY }}';" > config.js
 
+      - name: Upload artifact for deployment
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: ./
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v2
-        with:
-          branch: gh-pages
-          folder: ./
