@@ -10,16 +10,39 @@
     <!-- ✅ Site key is directly injected here at build time -->
     <script>
         const RECAPTCHA_SITE_KEY = "YOUR_SITE_KEY"; // This will be replaced by GitHub Actions
+
+        function verifyCallback(response) {
+            if (response) {
+                console.log("✅ reCAPTCHA Passed!");
+
+                // Send success message to Chrome Extension
+                if (window.opener) {
+                    window.opener.postMessage("recaptchaSuccess", "*");
+                    console.log("📤 Sent success message to Chrome extension");
+                }
+
+                // Close popup after 1 second
+                setTimeout(() => window.close(), 1000);
+            }
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
-            document.getElementById("captcha").setAttribute("data-sitekey", RECAPTCHA_SITE_KEY);
+            const captchaElement = document.getElementById("captcha");
+            captchaElement.setAttribute("data-sitekey", RECAPTCHA_SITE_KEY);
+
+            // Prevent form from actually submitting
+            document.getElementById("captcha-form").addEventListener("submit", function (event) {
+                event.preventDefault(); // Stop form submission
+                console.log("🚫 Form submission prevented");
+            });
         });
     </script>
 </head>
 <body>
     <h2>Verify CAPTCHA</h2>
-    <form action="?" method="POST">
+    <form id="captcha-form">
         <h1>reCAPTCHA Verification</h1>
-        <div class="g-recaptcha" id="captcha"></div>
+        <div class="g-recaptcha" id="captcha" data-callback="verifyCallback"></div>
         <br />
         <button type="submit">Submit</button>
     </form>
