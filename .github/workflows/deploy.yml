@@ -12,23 +12,37 @@ permissions:
   id-token: write
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4  # ✅ Latest version
+        uses: actions/checkout@v4
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v4  # ✅ Latest version
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16'  # Specify the Node.js version
+
+      - name: Install Dependencies
+        run: npm install  # Adjust this if you're using yarn or another package manager
+
+      - name: Build Project
+        run: npm run build  # Ensure this script generates your static files into a 'dist' directory
 
       - name: Create config.js
-        run: echo "const RECAPTCHA_SITE_KEY = '${{ secrets.RECAPTCHA_SITE_KEY }}';" > config.js  # ✅ Generate `config.js`
+        run: echo "const RECAPTCHA_SITE_KEY = '${{ secrets.RECAPTCHA_SITE_KEY }}';" > dist/config.js
 
-      - name: Upload GitHub Pages Artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v2
         with:
-          path: .
+          path: dist  # Ensure this matches the output directory of your build
+          name: github-pages  # Name the artifact 'github-pages'
 
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v2  # ✅ `v2` is the correct latest version
+        uses: actions/deploy-pages@v2
